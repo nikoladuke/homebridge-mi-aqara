@@ -45,7 +45,7 @@ class LockMotionSensorParser extends AccessoryParser {
         mainMotionSensorService.getCharacteristic(that.Characteristic.MotionDetected);
         result.push(mainMotionSensorService);
         
-        var batteryService  = new that.Service.BatteryService(accessoryName);
+        var batteryService  = new that.Service.Battery(accessoryName);
         batteryService.getCharacteristic(that.Characteristic.StatusLowBattery);
         batteryService.getCharacteristic(that.Characteristic.BatteryLevel);
         batteryService.getCharacteristic(that.Characteristic.ChargingState);
