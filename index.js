@@ -17,6 +17,7 @@ const GatewayUtil = require('./lib/GatewayUtil');
 const DeviceUtil = require('./lib/DeviceUtil');
 const AccessoryUtil = require('./lib/AccessoryUtil');
 const ParseUtil = require('./lib/ParseUtil');
+const attachIdentifyHandler = require('./lib/IdentifyHandler');
 
 const iv = Buffer.from([0x17, 0x99, 0x6d, 0x09, 0x3d, 0x28, 0xdd, 0xb3, 0xba, 0x69, 0x5a, 0x2e, 0x6f, 0x58, 0x56, 0x2e]);
 
@@ -88,9 +89,7 @@ function MiAqaraPlatform(log, config, api) {
 MiAqaraPlatform.prototype.configureAccessory = function(accessory) {
     var that = this;
     
-    accessory.on('identify', function(paired, callback) {
-        that.log.debug(accessory.displayName + " Identify!!!");
-    });
+    attachIdentifyHandler(accessory, that.log);
 
     if(that.AccessoryUtil) {
         that.AccessoryUtil.add(accessory);
