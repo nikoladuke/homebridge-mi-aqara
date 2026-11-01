@@ -97,7 +97,7 @@ test('lock parser resolves motion services by HAP service constructor and subtyp
   assert.deepEqual(updates, [true, true]);
 });
 
-test('Homebridge v2 migration does not reintroduce removed or obsolete accessory APIs', async () => {
+test('Homebridge v2 migration does not reintroduce deprecated or obsolete accessory APIs', async () => {
   const [lockParser, accessoryParser] = await Promise.all([
     readFile(new URL('../parser/LockParser.js', import.meta.url), 'utf8'),
     readFile(new URL('../parser/AccessoryParser.js', import.meta.url), 'utf8'),
