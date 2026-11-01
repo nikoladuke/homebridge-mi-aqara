@@ -41,7 +41,7 @@ class MotionSensor2MotionSensorParser extends AccessoryParser {
         service.getCharacteristic(that.Characteristic.MotionDetected);
         result.push(service);
         
-        var batteryService  = new that.Service.BatteryService(accessoryName);
+        var batteryService  = new that.Service.Battery(accessoryName);
         batteryService.getCharacteristic(that.Characteristic.StatusLowBattery);
         batteryService.getCharacteristic(that.Characteristic.BatteryLevel);
         batteryService.getCharacteristic(that.Characteristic.ChargingState);
@@ -125,7 +125,7 @@ class MotionSensor2LightSensorParser extends AccessoryParser {
         service.getCharacteristic(that.Characteristic.CurrentAmbientLightLevel);
         result.push(service);
         
-        var batteryService  = new that.Service.BatteryService(accessoryName);
+        var batteryService  = new that.Service.Battery(accessoryName);
         batteryService.getCharacteristic(that.Characteristic.StatusLowBattery);
         batteryService.getCharacteristic(that.Characteristic.BatteryLevel);
         batteryService.getCharacteristic(that.Characteristic.ChargingState);
