@@ -1,3 +1,5 @@
+const attachIdentifyHandler = require('../lib/IdentifyHandler');
+
 class AccessoryParser {
     constructor(platform, accessoryType) {
         this.platform = platform;
@@ -57,11 +59,7 @@ class AccessoryParser {
                 accessory.addService(service, accessoryName);
             });
 
-            accessory.reachable = true;
-            accessory.on('identify', function(paired, callback) {
-                that.platform.log.debug(accessory.displayName + " Identify!!!");
-                callback();
-            });
+            attachIdentifyHandler(accessory, that.platform.log);
 
             return accessory;
         }
