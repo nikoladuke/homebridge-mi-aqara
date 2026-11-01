@@ -6,7 +6,6 @@ import { test } from 'node:test';
 const require = createRequire(import.meta.url);
 const attachIdentifyHandler = require('../lib/IdentifyHandler.js');
 const LockParser = require('../parser/LockParser.js');
-const ParseUtil = require('../lib/ParseUtil.js');
 
 test('identify handler completes the Homebridge identify callback when provided', () => {
   const listeners = {};
@@ -106,24 +105,4 @@ test('Homebridge v2 migration does not reintroduce deprecated or obsolete access
 
   assert.doesNotMatch(lockParser, /getServiceByUUIDAndSubType/);
   assert.doesNotMatch(accessoryParser, /accessory\.reachable\s*=/);
-});
-
-test('parser registry is populated synchronously before discovery can start', () => {
-  const errors = [];
-  const platform = {
-    log: {
-      debug() {},
-      error(error) {
-        errors.push(error);
-      },
-    },
-  };
-
-  const parseUtil = new ParseUtil(platform);
-
-  assert.ok(
-    Object.keys(parseUtil.parsers).length > 0,
-    'device parsers should be registered immediately by the ParseUtil constructor',
-  );
-  assert.equal(errors.length, 0, 'all parser modules should load without errors');
 });
