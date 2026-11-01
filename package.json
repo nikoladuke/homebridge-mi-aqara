@@ -9,19 +9,29 @@
   "author": "hang.yin",
   "repository": {
     "type": "git",
-    "url": "https://github.com/vsternbach/homebridge-mi-aqara"
+    "url": "https://github.com/nikoladuke/homebridge-mi-aqara"
   },
   "bugs": {
     "url": "https://github.com/vsternbach/homebridge-mi-aqara/issues"
   },
   "engines": {
-    "node": ">=0.12.0",
-    "homebridge": ">=0.4.1"
+    "node": "^22.12.0 || ^24.0.0 || ^26.0.0",
+    "homebridge": "^1.6.0 || ^2.0.0"
   },
   "dependencies": {
     "body-parser": "1.18.3",
     "express": "4.16.3",
     "express-session": "1.15.6",
     "mqtt": "2.18.0"
+  },
+  "main": "./index.js",
+  "exports": {
+    ".": {
+      "import": "./index.mjs",
+      "require": "./index.js"
+    }
+  },
+  "scripts": {
+    "test": "node --test"
   }
 }
