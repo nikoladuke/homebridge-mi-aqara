@@ -149,7 +149,7 @@ class AccessoryParser {
     parserBatteryService(accessory, jsonObj) {
         var that = this;
         var deviceSid = jsonObj['sid'];
-        var batteryService = accessory.getService(that.Service.BatteryService);
+        var batteryService = accessory.getService(that.Service.Battery);
         var chargingStateCharacteristic = batteryService.getCharacteristic(that.Characteristic.ChargingState);
         var statusLowBatteryCharacteristic = batteryService.getCharacteristic(that.Characteristic.StatusLowBattery);
         var batteryLevelCharacteristic = batteryService.getCharacteristic(that.Characteristic.BatteryLevel);
