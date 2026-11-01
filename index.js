@@ -32,14 +32,15 @@ const serverMQTTClientPrefix = "/homebridge-mi-aqara";
 
 var PlatformAccessory, Accessory, Service, Characteristic, UUIDGen;
 
-module.exports = function(homebridge) {
-    PlatformAccessory = homebridge.platformAccessory;
-    Accessory = homebridge.hap.Accessory;
-    Service = homebridge.hap.Service;
-    Characteristic = homebridge.hap.Characteristic;
-    UUIDGen = homebridge.hap.uuid;
-    
-    homebridge.registerPlatform("homebridge-mi-aqara", "MiAqaraPlatform", MiAqaraPlatform, true);
+module.exports = function(api) {
+    PlatformAccessory = api.platformAccessory;
+    Accessory = api.hap.Accessory;
+    Service = api.hap.Service;
+    Characteristic = api.hap.Characteristic;
+    UUIDGen = api.hap.uuid;
+
+    // Modern platform registration works with Homebridge v1.6+ and v2.
+    api.registerPlatform(packageFile.name, "MiAqaraPlatform", MiAqaraPlatform);
 }
 
 function MiAqaraPlatform(log, config, api) {
@@ -87,7 +88,6 @@ function MiAqaraPlatform(log, config, api) {
 MiAqaraPlatform.prototype.configureAccessory = function(accessory) {
     var that = this;
     
-    accessory.reachable = true;
     accessory.on('identify', function(paired, callback) {
         that.log.debug(accessory.displayName + " Identify!!!");
     });
@@ -851,7 +851,7 @@ MiAqaraPlatform.prototype.sendWriteCommandWithoutFeedback = function(deviceSid, 
 
 MiAqaraPlatform.prototype.registerPlatformAccessories = function(accessories) {
     var that = this;
-    that.api.registerPlatformAccessories("homebridge-mi-aqara", "MiAqaraPlatform", accessories);
+    that.api.registerPlatformAccessories(packageFile.name, "MiAqaraPlatform", accessories);
     accessories.forEach(function(accessory, index, arr) {
         that.log.info("create accessory - UUID: " + accessory.UUID);
         that.AccessoryUtil.add(accessory);
@@ -860,7 +860,7 @@ MiAqaraPlatform.prototype.registerPlatformAccessories = function(accessories) {
 
 MiAqaraPlatform.prototype.unregisterPlatformAccessories = function(accessories) {
     var that = this;
-    that.api.unregisterPlatformAccessories("homebridge-mi-aqara", "MiAqaraPlatform", accessories);
+    that.api.unregisterPlatformAccessories(packageFile.name, "MiAqaraPlatform", accessories);
     accessories.forEach(function(accessory, index, arr) {
         that.log.info("delete accessory - UUID: " + accessory.UUID);
         that.AccessoryUtil.remove(accessory.UUID);
