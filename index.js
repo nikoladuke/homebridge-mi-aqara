@@ -18,7 +18,6 @@ const DeviceUtil = require('./lib/DeviceUtil');
 const AccessoryUtil = require('./lib/AccessoryUtil');
 const ParseUtil = require('./lib/ParseUtil');
 const attachIdentifyHandler = require('./lib/IdentifyHandler');
-const filterNewAccessories = require('./lib/filterNewAccessories');
 
 const iv = Buffer.from([0x17, 0x99, 0x6d, 0x09, 0x3d, 0x28, 0xdd, 0xb3, 0xba, 0x69, 0x5a, 0x2e, 0x6f, 0x58, 0x56, 0x2e]);
 
@@ -853,13 +852,8 @@ MiAqaraPlatform.prototype.sendWriteCommandWithoutFeedback = function(deviceSid, 
 
 MiAqaraPlatform.prototype.registerPlatformAccessories = function(accessories) {
     var that = this;
-    var newAccessories = filterNewAccessories(accessories, that.AccessoryUtil);
-    if (newAccessories.length === 0) {
-        return;
-    }
-
-    that.api.registerPlatformAccessories(packageFile.name, "MiAqaraPlatform", newAccessories);
-    newAccessories.forEach(function(accessory) {
+    that.api.registerPlatformAccessories(packageFile.name, "MiAqaraPlatform", accessories);
+    accessories.forEach(function(accessory, index, arr) {
         that.log.info("create accessory - UUID: " + accessory.UUID);
         that.AccessoryUtil.add(accessory);
     });
