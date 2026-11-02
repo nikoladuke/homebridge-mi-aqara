@@ -6,6 +6,7 @@ import { test } from 'node:test';
 const require = createRequire(import.meta.url);
 const attachIdentifyHandler = require('../lib/IdentifyHandler.js');
 const LockParser = require('../parser/LockParser.js');
+const GatewayParser = require('../parser/GatewayParser.js');
 
 test('identify handler completes the Homebridge identify callback when provided', () => {
   const listeners = {};
@@ -105,4 +106,31 @@ test('Homebridge v2 migration does not reintroduce deprecated or obsolete access
 
   assert.doesNotMatch(lockParser, /getServiceByUUIDAndSubType/);
   assert.doesNotMatch(accessoryParser, /accessory\.reachable\s*=/);
+});
+
+
+test('gateway parsers resolve accessory categories from the separately exported HAP categories', () => {
+  const categories = { LIGHTBULB: 5, SENSOR: 10, SWITCH: 8 };
+  const platform = {
+    Accessory: class Accessory {},
+    Categories: categories,
+  };
+
+  const parser = new GatewayParser(platform);
+
+  assert.equal(parser.accessoriesParsers.Gateway_Lightbulb.getAccessoryCategory('light'), categories.LIGHTBULB);
+  assert.equal(parser.accessoriesParsers.Gateway_LightSensor.getAccessoryCategory('sensor'), categories.SENSOR);
+  assert.equal(parser.accessoriesParsers.Gateway_Switch_JoinPermission.getAccessoryCategory('switch'), categories.SWITCH);
+  assert.equal(parser.accessoriesParsers.Gateway_Ringtone.getAccessoryCategory('ringtone'), categories.SWITCH);
+});
+
+test('gateway parsers retain compatibility with HAP versions exposing Accessory.Categories', () => {
+  const categories = { LIGHTBULB: 5, SENSOR: 10, SWITCH: 8 };
+  class Accessory {}
+  Accessory.Categories = categories;
+
+  const parser = new GatewayParser({ Accessory });
+
+  assert.equal(parser.accessoriesParsers.Gateway_Lightbulb.getAccessoryCategory('light'), categories.LIGHTBULB);
+  assert.equal(parser.accessoriesParsers.Gateway_LightSensor.getAccessoryCategory('sensor'), categories.SENSOR);
 });
