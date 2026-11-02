@@ -31,13 +31,14 @@ const serverAqaraLANProtocolServerPort = 9898;
 
 const serverMQTTClientPrefix = "/homebridge-mi-aqara";
 
-var PlatformAccessory, Accessory, Service, Characteristic, UUIDGen;
+var PlatformAccessory, Accessory, Service, Characteristic, Categories, UUIDGen;
 
 module.exports = function(api) {
     PlatformAccessory = api.platformAccessory;
     Accessory = api.hap.Accessory;
     Service = api.hap.Service;
     Characteristic = api.hap.Characteristic;
+    Categories = api.hap.Categories || Accessory.Categories;
     UUIDGen = api.hap.uuid;
 
     // Modern platform registration works with Homebridge v1.6+ and v2.
@@ -54,6 +55,7 @@ function MiAqaraPlatform(log, config, api) {
     this.PlatformAccessory = PlatformAccessory;
     this.Service = Service;
     this.Characteristic = Characteristic;
+    this.Categories = Categories;
     this.UUIDGen = UUIDGen;
     
     this.api = api;
