@@ -6,6 +6,11 @@ class AccessoryParser {
         this.accessoryType = accessoryType;
 
         this.Accessory = platform.Accessory;
+        // HAP-NodeJS 2 exports Categories separately from Accessory.
+        // Keep the legacy Accessory.Categories lookup available to existing parsers.
+        if (!this.Accessory.Categories && platform.Categories) {
+            this.Accessory.Categories = platform.Categories;
+        }
         this.PlatformAccessory = platform.PlatformAccessory;
         this.Service = platform.Service;
         this.Characteristic = platform.Characteristic;
