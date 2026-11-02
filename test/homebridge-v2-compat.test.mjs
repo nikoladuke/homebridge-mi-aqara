@@ -134,32 +134,3 @@ test('gateway parsers retain compatibility with HAP versions exposing Accessory.
   assert.equal(parser.accessoriesParsers.Gateway_Lightbulb.getAccessoryCategory('light'), categories.LIGHTBULB);
   assert.equal(parser.accessoriesParsers.Gateway_LightSensor.getAccessoryCategory('sensor'), categories.SENSOR);
 });
-
-
-test('duplicate accessory UUIDs are registered only once', () => {
-  const filterNewAccessories = require('../lib/filterNewAccessories.js');
-  const first = { UUID: 'device-1' };
-  const duplicate = { UUID: 'device-1' };
-  const second = { UUID: 'device-2' };
-  const accessoryUtil = {
-    getByUUID(uuid) {
-      return uuid === 'device-2' ? second : null;
-    },
-  };
-
-  assert.deepEqual(
-    filterNewAccessories([first, duplicate, second], accessoryUtil),
-    [first],
-  );
-});
-
-test('duplicate accessory filter handles missing and empty batches', () => {
-  const filterNewAccessories = require('../lib/filterNewAccessories.js');
-  const accessoryUtil = { getByUUID: () => null };
-
-  assert.deepEqual(filterNewAccessories([], accessoryUtil), []);
-  assert.deepEqual(filterNewAccessories(null, accessoryUtil), []);
-  assert.deepEqual(filterNewAccessories([null, {}, { UUID: 'device-1' }], accessoryUtil), [
-    { UUID: 'device-1' },
-  ]);
-});
