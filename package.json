@@ -6,7 +6,7 @@
   "keywords": [
     "homebridge-plugin"
   ],
-  "author": "nikoladuke",
+  "author": "hang.yin",
   "repository": {
     "type": "git",
     "url": "https://github.com/nikoladuke/homebridge-mi-aqara"
