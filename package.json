@@ -12,7 +12,7 @@
     "url": "https://github.com/nikoladuke/homebridge-mi-aqara"
   },
   "bugs": {
-    "url": "https://github.com/vsternbach/homebridge-mi-aqara/issues"
+    "url": "https://github.com/nikoladuke/homebridge-mi-aqara/issues"
   },
   "engines": {
     "node": "^22.12.0 || ^24.0.0",
