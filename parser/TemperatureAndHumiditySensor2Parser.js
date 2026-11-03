@@ -42,7 +42,7 @@ class TemperatureAndHumiditySensor2TemperatureSensorParser extends AccessoryPars
         service.getCharacteristic(that.Characteristic.CurrentTemperature);
         result.push(service);
         
-        var batteryService  = new that.Service.BatteryService(accessoryName);
+        var batteryService  = new that.Service.Battery(accessoryName);
         batteryService.getCharacteristic(that.Characteristic.StatusLowBattery);
         batteryService.getCharacteristic(that.Characteristic.BatteryLevel);
         batteryService.getCharacteristic(that.Characteristic.ChargingState);
@@ -122,7 +122,7 @@ class TemperatureAndHumiditySensor2HumiditySensorParser extends AccessoryParser 
         service.getCharacteristic(that.Characteristic.CurrentRelativeHumidity);
         result.push(service);
         
-        var batteryService  = new that.Service.BatteryService(accessoryName);
+        var batteryService  = new that.Service.Battery(accessoryName);
         batteryService.getCharacteristic(that.Characteristic.StatusLowBattery);
         batteryService.getCharacteristic(that.Characteristic.BatteryLevel);
         batteryService.getCharacteristic(that.Characteristic.ChargingState);
@@ -198,7 +198,7 @@ class TemperatureAndHumiditySensor2BarometricSensorParser extends AccessoryParse
         service.getCharacteristic(that.Characteristic.CurrentBarometric);
         result.push(service);
         
-        var batteryService  = new that.Service.BatteryService(accessoryName);
+        var batteryService  = new that.Service.Battery(accessoryName);
         batteryService.getCharacteristic(that.Characteristic.StatusLowBattery);
         batteryService.getCharacteristic(that.Characteristic.BatteryLevel);
         batteryService.getCharacteristic(that.Characteristic.ChargingState);

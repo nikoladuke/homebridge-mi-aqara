@@ -17,6 +17,7 @@ const GatewayUtil = require('./lib/GatewayUtil');
 const DeviceUtil = require('./lib/DeviceUtil');
 const AccessoryUtil = require('./lib/AccessoryUtil');
 const ParseUtil = require('./lib/ParseUtil');
+const attachIdentifyHandler = require('./lib/IdentifyHandler');
 
 const iv = Buffer.from([0x17, 0x99, 0x6d, 0x09, 0x3d, 0x28, 0xdd, 0xb3, 0xba, 0x69, 0x5a, 0x2e, 0x6f, 0x58, 0x56, 0x2e]);
 
@@ -30,16 +31,18 @@ const serverAqaraLANProtocolServerPort = 9898;
 
 const serverMQTTClientPrefix = "/homebridge-mi-aqara";
 
-var PlatformAccessory, Accessory, Service, Characteristic, UUIDGen;
+var PlatformAccessory, Accessory, Service, Characteristic, Categories, UUIDGen;
 
-module.exports = function(homebridge) {
-    PlatformAccessory = homebridge.platformAccessory;
-    Accessory = homebridge.hap.Accessory;
-    Service = homebridge.hap.Service;
-    Characteristic = homebridge.hap.Characteristic;
-    UUIDGen = homebridge.hap.uuid;
-    
-    homebridge.registerPlatform("homebridge-mi-aqara", "MiAqaraPlatform", MiAqaraPlatform, true);
+module.exports = function(api) {
+    PlatformAccessory = api.platformAccessory;
+    Accessory = api.hap.Accessory;
+    Service = api.hap.Service;
+    Characteristic = api.hap.Characteristic;
+    Categories = api.hap.Categories || Accessory.Categories;
+    UUIDGen = api.hap.uuid;
+
+    // Modern platform registration works with Homebridge v1.6+ and v2.
+    api.registerPlatform(packageFile.name, "MiAqaraPlatform", MiAqaraPlatform);
 }
 
 function MiAqaraPlatform(log, config, api) {
@@ -52,6 +55,7 @@ function MiAqaraPlatform(log, config, api) {
     this.PlatformAccessory = PlatformAccessory;
     this.Service = Service;
     this.Characteristic = Characteristic;
+    this.Categories = Categories;
     this.UUIDGen = UUIDGen;
     
     this.api = api;
@@ -87,10 +91,7 @@ function MiAqaraPlatform(log, config, api) {
 MiAqaraPlatform.prototype.configureAccessory = function(accessory) {
     var that = this;
     
-    accessory.reachable = true;
-    accessory.on('identify', function(paired, callback) {
-        that.log.debug(accessory.displayName + " Identify!!!");
-    });
+    attachIdentifyHandler(accessory, that.log);
 
     if(that.AccessoryUtil) {
         that.AccessoryUtil.add(accessory);
@@ -851,7 +852,7 @@ MiAqaraPlatform.prototype.sendWriteCommandWithoutFeedback = function(deviceSid, 
 
 MiAqaraPlatform.prototype.registerPlatformAccessories = function(accessories) {
     var that = this;
-    that.api.registerPlatformAccessories("homebridge-mi-aqara", "MiAqaraPlatform", accessories);
+    that.api.registerPlatformAccessories(packageFile.name, "MiAqaraPlatform", accessories);
     accessories.forEach(function(accessory, index, arr) {
         that.log.info("create accessory - UUID: " + accessory.UUID);
         that.AccessoryUtil.add(accessory);
@@ -860,7 +861,7 @@ MiAqaraPlatform.prototype.registerPlatformAccessories = function(accessories) {
 
 MiAqaraPlatform.prototype.unregisterPlatformAccessories = function(accessories) {
     var that = this;
-    that.api.unregisterPlatformAccessories("homebridge-mi-aqara", "MiAqaraPlatform", accessories);
+    that.api.unregisterPlatformAccessories(packageFile.name, "MiAqaraPlatform", accessories);
     accessories.forEach(function(accessory, index, arr) {
         that.log.info("delete accessory - UUID: " + accessory.UUID);
         that.AccessoryUtil.remove(accessory.UUID);

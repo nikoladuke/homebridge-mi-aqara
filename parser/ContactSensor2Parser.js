@@ -40,7 +40,7 @@ class ContactSensor2ContactSensorParser extends AccessoryParser {
         service.getCharacteristic(that.Characteristic.ContactSensorState);
         result.push(service);
         
-        var batteryService  = new that.Service.BatteryService(accessoryName);
+        var batteryService  = new that.Service.Battery(accessoryName);
         batteryService.getCharacteristic(that.Characteristic.StatusLowBattery);
         batteryService.getCharacteristic(that.Characteristic.BatteryLevel);
         batteryService.getCharacteristic(that.Characteristic.ChargingState);

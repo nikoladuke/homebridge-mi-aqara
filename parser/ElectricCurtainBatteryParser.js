@@ -42,7 +42,7 @@ class ElectricCurtainBatteryWindowCoveringParser extends AccessoryParser {
         service.getCharacteristic(that.Characteristic.TargetPosition);
         result.push(service);
 
-        var batteryService = new that.Service.BatteryService(accessoryName);
+        var batteryService = new that.Service.Battery(accessoryName);
         batteryService.getCharacteristic(that.Characteristic.StatusLowBattery);
         batteryService.getCharacteristic(that.Characteristic.BatteryLevel);
         batteryService.getCharacteristic(that.Characteristic.ChargingState);

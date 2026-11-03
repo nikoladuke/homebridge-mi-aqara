@@ -45,7 +45,7 @@ class LockMotionSensorParser extends AccessoryParser {
         mainMotionSensorService.getCharacteristic(that.Characteristic.MotionDetected);
         result.push(mainMotionSensorService);
         
-        var batteryService  = new that.Service.BatteryService(accessoryName);
+        var batteryService  = new that.Service.Battery(accessoryName);
         batteryService.getCharacteristic(that.Characteristic.StatusLowBattery);
         batteryService.getCharacteristic(that.Characteristic.BatteryLevel);
         batteryService.getCharacteristic(that.Characteristic.ChargingState);
@@ -75,17 +75,17 @@ class LockMotionSensorParser extends AccessoryParser {
         var accessoryName = that.platform.ConfigUtil.getAccessoryName(deviceSid, that.accessoryType);
         var accessory = that.platform.AccessoryUtil.getByUUID(uuid);
         if(accessory) {
-            var mainMotionSensorService = accessory.getServiceByUUIDAndSubType(accessoryName, 'main');
-            var mainMotionSensorService = mainMotionSensorService.getCharacteristic(that.Characteristic.MotionDetected);
+            var mainMotionSensorService = accessory.getServiceById(that.Service.MotionSensor, 'main');
             var value = that.getMotionDetectedCharacteristicValue(jsonObj, null);
-            if(null != value) {
-                mainMotionSensorService.updateValue(true);
+            if(null != value && mainMotionSensorService) {
+                var mainMotionDetectedCharacteristic = mainMotionSensorService.getCharacteristic(that.Characteristic.MotionDetected);
+                mainMotionDetectedCharacteristic.updateValue(true);
                 setTimeout(() => {
-                    mainMotionSensorService.updateValue(false);
+                    mainMotionDetectedCharacteristic.updateValue(false);
                 }, 1 * 60 * 1000);
                 
                 var subMotionSensorName = that.platform.ConfigUtil.getAccessoryName(deviceSid, 'Lock_MotionSensor_' + value);
-                var subMotionSensorService = accessory.getServiceByUUIDAndSubType(subMotionSensorName, value);
+                var subMotionSensorService = accessory.getServiceById(that.Service.MotionSensor, value);
                 if(subMotionSensorService) {
                     var subMotionDetectedCharacteristic = subMotionSensorService.getCharacteristic(that.Characteristic.MotionDetected);
                     subMotionDetectedCharacteristic.updateValue(true);

@@ -1,9 +1,16 @@
+const attachIdentifyHandler = require('../lib/IdentifyHandler');
+
 class AccessoryParser {
     constructor(platform, accessoryType) {
         this.platform = platform;
         this.accessoryType = accessoryType;
 
         this.Accessory = platform.Accessory;
+        // HAP-NodeJS 2 exports Categories separately from Accessory.
+        // Keep the legacy Accessory.Categories lookup available to existing parsers.
+        if (!this.Accessory.Categories && platform.Categories) {
+            this.Accessory.Categories = platform.Categories;
+        }
         this.PlatformAccessory = platform.PlatformAccessory;
         this.Service = platform.Service;
         this.Characteristic = platform.Characteristic;
@@ -57,11 +64,7 @@ class AccessoryParser {
                 accessory.addService(service, accessoryName);
             });
 
-            accessory.reachable = true;
-            accessory.on('identify', function(paired, callback) {
-                that.platform.log.debug(accessory.displayName + " Identify!!!");
-                callback();
-            });
+            attachIdentifyHandler(accessory, that.platform.log);
 
             return accessory;
         }
@@ -149,7 +152,7 @@ class AccessoryParser {
     parserBatteryService(accessory, jsonObj) {
         var that = this;
         var deviceSid = jsonObj['sid'];
-        var batteryService = accessory.getService(that.Service.BatteryService);
+        var batteryService = accessory.getService(that.Service.Battery);
         var chargingStateCharacteristic = batteryService.getCharacteristic(that.Characteristic.ChargingState);
         var statusLowBatteryCharacteristic = batteryService.getCharacteristic(that.Characteristic.StatusLowBattery);
         var batteryLevelCharacteristic = batteryService.getCharacteristic(that.Characteristic.BatteryLevel);
