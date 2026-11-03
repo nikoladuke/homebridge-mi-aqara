@@ -1,12 +1,12 @@
 {
   "name": "homebridge-mi-aqara-ng",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "description": "Homebridge Mi Home/Aqara plugin",
   "license": "GPL",
   "keywords": [
     "homebridge-plugin"
   ],
-  "author": "hang.yin",
+  "author": "nikoladuke",
   "repository": {
     "type": "git",
     "url": "https://github.com/nikoladuke/homebridge-mi-aqara"
